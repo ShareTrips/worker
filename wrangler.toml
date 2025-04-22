@@ -1,3 +1,7 @@
 name = "my-worker"  # Worker 名称（需唯一）
 main = "worker.js"   # 入口文件（你的 Worker 代码）
 compatibility_date = "2025-04-22"  # 兼容性日期
+
+[[r2_buckets]]
+binding = "r2-bucket-bausch-cc"  # Worker 中使用的变量名
+bucket_name = "bausch-cc"  # 实际的 R2 桶名
