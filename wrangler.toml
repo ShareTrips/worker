@@ -10,3 +10,46 @@ bucket_name = "bausch-cc"  # 实际的 R2 桶名
 binding = "r2-bucket-tunz-cn"  # Worker 中使用的变量名
 bucket_name = "tunz-cn"  # 实际的 R2 桶名
 
+[[r2_buckets]]
+binding = "r2-bucket-dszhw-cn"  # Worker 中使用的变量名
+bucket_name = "dszhw-cn"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-desbts-com"  # Worker 中使用的变量名
+bucket_name = "desbts-com"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-iv587-cc"  # Worker 中使用的变量名
+bucket_name = "iv587-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-nepicool-cc"  # Worker 中使用的变量名
+bucket_name = "nepicool-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-school-link-cc"  # Worker 中使用的变量名
+bucket_name = "school-link-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-wxgames-cc"  # Worker 中使用的变量名
+bucket_name = "wxgames-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-topmom-cc"  # Worker 中使用的变量名
+bucket_name = "topmom-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-bxgdata-cn"  # Worker 中使用的变量名
+bucket_name = "bxgdata-cn"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-donglier-com-cn"  # Worker 中使用的变量名
+bucket_name = "donglier-com-cn"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-wodecheng-com-cn"  # Worker 中使用的变量名
+bucket_name = "wodecheng-com-cn"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-szxywl-com-cn"  # Worker 中使用的变量名
+bucket_name = "szxywl-com-cn"  # 实际的 R2 桶名
