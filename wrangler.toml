@@ -5,3 +5,8 @@ compatibility_date = "2025-04-22"  # 兼容性日期
 [[r2_buckets]]
 binding = "r2-bucket-bausch-cc"  # Worker 中使用的变量名
 bucket_name = "bausch-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-tunz-cn"  # Worker 中使用的变量名
+bucket_name = "tunz-cn"  # 实际的 R2 桶名
+
