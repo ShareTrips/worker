@@ -2,7 +2,17 @@
 const SITE_TO_BUCKET = {
   "www.bausch.cc": "r2-bucket-bausch-cc",
   "www.tunz.cn": "r2-bucket-tunz-cn",
-  // 添加更多域名和桶...
+  "www.iv587.cc": "r2-bucket-iv587-cc",
+  "www.nepicool.cc": "r2-bucket-nepicool-cc",
+  "www.school-link.cc": "r2-bucket-school-link-cc",
+  "www.dszhw.cn": "r2-bucket-dszhw-cn",
+  "www.desbts.com": "r2-bucket-desbts-com",
+  "www.wxgames.cc": "r2-bucket-wxgames-cc",
+  "www.topmom.cc": "r2-bucket-topmom-cc",
+  "www.bxgdata.cn": "r2-bucket-bxgdata-cn",
+  "www.donglier.com.cn": "r2-bucket-donglier-com-cn",
+  "www.wodecheng.com.cn": "r2-bucket-wodecheng-com-cn",
+  "www.szxywl.com.cn": "r2-bucket-szxywl-com-cn",
 };
 
 export default {
