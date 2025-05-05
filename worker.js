@@ -1,6 +1,7 @@
 // 定义域名到 R2 桶的映射
 const SITE_TO_BUCKET = {
   "www.bausch.cc": "r2-bucket-bausch-cc",
+  "www.tunz.cn": "r2-bucket-tunz-cn",
   // 添加更多域名和桶...
 };
 
