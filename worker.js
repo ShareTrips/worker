@@ -20,28 +20,48 @@ export default {
     const url = new URL(request.url);
     const hostname = url.hostname;
 
-    // 1. 查找对应的 R2 桶
+    // 1. 检查域名配置
     const bucketName = SITE_TO_BUCKET[hostname];
     if (!bucketName) {
       return new Response("Domain not configured", { status: 404 });
     }
 
     // 2. 自动补全 index.html
-    if (url.pathname.endsWith('/') || !url.pathname.includes('.')) {
-      url.pathname += 'index.html';
+    let pathname = url.pathname;
+    if (pathname.endsWith('/') || !pathname.includes('.')) {
+      pathname += 'index.html';
     }
 
-    // 3. 从 R2 桶获取文件
-    const objectKey = url.pathname.slice(1); // 移除路径开头的 `/`
-    const bucket = env[bucketName]; // 需要绑定 R2 桶到 Worker
-    const object = await bucket.get(objectKey);
+    // 3. 生成缓存键（包含域名和路径，避免冲突）
+    const cacheKey = new Request(`${hostname}${pathname}`, request);
+    const cache = caches.default;
 
-    // 4. 返回文件或 404
-    if (object) {
-      return new Response(object.body, {
-        headers: { "Content-Type": object.httpMetadata?.contentType || "text/html" },
+    // 4. 先尝试从 Cloudflare 边缘缓存读取
+    let response = await cache.match(cacheKey);
+
+    // 5. 缓存未命中时，从 R2 获取并缓存
+    if (!response) {
+      const objectKey = pathname.slice(1); // 移除路径开头的 `/`
+      const bucket = env[bucketName];
+      const object = await bucket.get(objectKey);
+
+      if (!object) {
+        return new Response("File not found", { status: 404 });
+      }
+
+      // 构建响应并设置缓存头
+      response = new Response(object.body, {
+        headers: {
+          "Content-Type": object.httpMetadata?.contentType || "text/html",
+          "Cache-Control": "public, max-age=86400", // 缓存 24 小时
+          "CDN-Cache-Control": "public, max-age=86400", // 确保 Cloudflare CDN 缓存
+        },
       });
+
+      // 将响应存储到缓存（非阻塞）
+      event.waitUntil(cache.put(cacheKey, response.clone()));
     }
-    return new Response("File not found", { status: 404 });
+
+    return response;
   },
 };
