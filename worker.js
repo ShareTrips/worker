@@ -16,50 +16,53 @@ const SITE_TO_BUCKET = {
 };
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, context) {  // Added context parameter
     const url = new URL(request.url);
     const hostname = url.hostname;
 
-    // 1. 检查域名配置
+    // 1. Check domain configuration
     const bucketName = SITE_TO_BUCKET[hostname];
     if (!bucketName) {
       return new Response("Domain not configured", { status: 404 });
     }
 
-    // 2. 自动补全 index.html
+    // 2. Auto-complete index.html
     let pathname = url.pathname;
     if (pathname.endsWith('/') || !pathname.includes('.')) {
       pathname += 'index.html';
     }
 
-    // 3. 生成缓存键（包含域名和路径，避免冲突）
+    // 3. Generate cache key
     const cacheKey = new Request(`${hostname}${pathname}`, request);
     const cache = caches.default;
 
-    // 4. 先尝试从 Cloudflare 边缘缓存读取
+    // 4. Try to get from cache first
     let response = await cache.match(cacheKey);
 
-    // 5. 缓存未命中时，从 R2 获取并缓存
     if (!response) {
-      const objectKey = pathname.slice(1); // 移除路径开头的 `/`
+      const objectKey = pathname.slice(1);
       const bucket = env[bucketName];
-      const object = await bucket.get(objectKey);
+      
+      try {
+        const object = await bucket.get(objectKey);
 
-      if (!object) {
-        return new Response("File not found", { status: 404 });
+        if (!object) {
+          return new Response("File not found", { status: 404 });
+        }
+
+        response = new Response(object.body, {
+          headers: {
+            "Content-Type": object.httpMetadata?.contentType || "text/html",
+            "Cache-Control": "public, max-age=86400",
+            "CDN-Cache-Control": "public, max-age=86400",
+          },
+        });
+
+        // Use context.waitUntil instead of event.waitUntil
+        context.waitUntil(cache.put(cacheKey, response.clone()));
+      } catch (error) {
+        return new Response(`Error fetching object: ${error.message}`, { status: 500 });
       }
-
-      // 构建响应并设置缓存头
-      response = new Response(object.body, {
-        headers: {
-          "Content-Type": object.httpMetadata?.contentType || "text/html",
-          "Cache-Control": "public, max-age=86400", // 缓存 24 小时
-          "CDN-Cache-Control": "public, max-age=86400", // 确保 Cloudflare CDN 缓存
-        },
-      });
-
-      // 将响应存储到缓存（非阻塞）
-      event.waitUntil(cache.put(cacheKey, response.clone()));
     }
 
     return response;
