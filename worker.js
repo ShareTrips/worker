@@ -16,55 +16,58 @@ const SITE_TO_BUCKET = {
 };
 
 export default {
-  async fetch(request, env, context) {  // Added context parameter
+  async fetch(request, env, context) {
     const url = new URL(request.url);
-    const hostname = url.hostname;
+    const hostname = url.hostname;    
 
-    // 1. Check domain configuration
+     // 1. 查找对应的 R2 桶
     const bucketName = SITE_TO_BUCKET[hostname];
     if (!bucketName) {
       return new Response("Domain not configured", { status: 404 });
     }
 
-    // 2. Auto-complete index.html
+    // 1. 自动补全 index.html
     let pathname = url.pathname;
     if (pathname.endsWith('/') || !pathname.includes('.')) {
       pathname += 'index.html';
     }
 
-    // 3. Generate cache key
-    const cacheKey = new Request(`${hostname}${pathname}`, request);
+    // 2. 生成缓存键（使用完整 URL 避免冲突）
+    const cacheKey = new Request(url.origin + pathname, request);
     const cache = caches.default;
 
-    // 4. Try to get from cache first
+    // 3. 先检查边缘缓存
     let response = await cache.match(cacheKey);
 
+    // 4. 缓存未命中时回源到 R2
     if (!response) {
-      const objectKey = pathname.slice(1);
+      const objectKey = pathname.slice(1); // 移除开头的 `/`
       const bucket = env[bucketName];
-      
-      try {
-        const object = await bucket.get(objectKey);
+      const object = await bucket.get(objectKey);
 
-        if (!object) {
-          return new Response("File not found", { status: 404 });
-        }
-
-        response = new Response(object.body, {
-          headers: {
-            "Content-Type": object.httpMetadata?.contentType || "text/html",
-            "Cache-Control": "public, max-age=86400",
-            "CDN-Cache-Control": "public, max-age=86400",
-          },
-        });
-
-        // Use context.waitUntil instead of event.waitUntil
-        context.waitUntil(cache.put(cacheKey, response.clone()));
-      } catch (error) {
-        return new Response(`Error fetching object: ${error.message}`, { status: 500 });
+      if (!object) {
+        return new Response("File not found", { status: 404 });
       }
+
+      // 5. 设置缓存头（关键！控制 Cloudflare 边缘缓存行为）
+      const headers = new Headers();
+      headers.set("Content-Type", object.httpMetadata?.contentType || "text/html");
+      
+      // 核心优化：告诉 Cloudflare CDN 缓存此文件
+      headers.set("Cache-Control", "public, max-age=86400"); // 浏览器缓存 1 天
+      headers.set("CDN-Cache-Control", "public, max-age=86400"); // Cloudflare 边缘缓存 7 天
+
+      // 可选：添加 ETag 或 Last-Modified 支持协商缓存
+      if (object.etag) {
+        headers.set("ETag", object.etag);
+      }
+
+      response = new Response(object.body, { headers });
+
+      // 6. 将响应存入边缘缓存（非阻塞）
+      context.waitUntil(cache.put(cacheKey, response.clone()));
     }
 
     return response;
-  },
+  }
 };
