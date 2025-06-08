@@ -1,6 +1,6 @@
 name = "my-worker"  # Worker 名称（需唯一）
 main = "worker.js"   # 入口文件（你的 Worker 代码）
-compatibility_date = "2025-04-22"  # 兼容性日期
+compatibility_date = "2025-06-08"  # 兼容性日期
 
 [[r2_buckets]]
 binding = "r2-bucket-bausch-cc"  # Worker 中使用的变量名
@@ -53,3 +53,39 @@ bucket_name = "wodecheng-com-cn"  # 实际的 R2 桶名
 [[r2_buckets]]
 binding = "r2-bucket-szxywl-com-cn"  # Worker 中使用的变量名
 bucket_name = "szxywl-com-cn"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-chuanshanshop-cn"  # Worker 中使用的变量名
+bucket_name = "chuanshanshop-cn"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-ywos-net"  # Worker 中使用的变量名
+bucket_name = "ywos-net"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-yzjxd-cn"  # Worker 中使用的变量名
+bucket_name = "yzjxd-cn"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-fanlizhijia-cc"  # Worker 中使用的变量名
+bucket_name = "fanlizhijia-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-zgdlgc-cc"  # Worker 中使用的变量名
+bucket_name = "zgdlgc-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-maotan-cc"  # Worker 中使用的变量名
+bucket_name = "maotan-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-daihao-cc"  # Worker 中使用的变量名
+bucket_name = "daihao-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-eyahong-cc"  # Worker 中使用的变量名
+bucket_name = "eyahong-cc"  # 实际的 R2 桶名
+
+[[r2_buckets]]
+binding = "r2-bucket-ichisha-cc"  # Worker 中使用的变量名
+bucket_name = "ichisha-cc"  # 实际的 R2 桶名
