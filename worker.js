@@ -13,6 +13,15 @@ const SITE_TO_BUCKET = {
   "www.donglier.com.cn": "r2-bucket-donglier-com-cn",
   "www.wodecheng.com.cn": "r2-bucket-wodecheng-com-cn",
   "www.szxywl.com.cn": "r2-bucket-szxywl-com-cn",
+  "www.chuanshanshop.cn": "r2-bucket-chuanshanshop-cn",
+  "www.ywos.net": "r2-bucket-ywos-net",
+  "www.yzjxd.cn": "r2-bucket-yzjxd-cn",
+  "www.fanlizhijia.cc": "r2-bucket-fanlizhijia-cc",
+  "www.zgdlgc.cc": "r2-bucket-zgdlgc-cc",
+  "www.maotan.cc": "r2-bucket-maotan-cc",
+  "www.daihao.cc": "r2-bucket-daihao-cc",
+  "www.eyahong.cc": "r2-bucket-eyahong-cc",
+  "www.ichisha.cc": "r2-bucket-ichisha-cc",
 };
 
 export default {
